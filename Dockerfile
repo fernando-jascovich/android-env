@@ -20,6 +20,7 @@ RUN mkdir /opt/android-sdk && unzip /tmp/android-cli.zip -d /opt/android-sdk
 RUN rm /tmp/android-cli.zip
 ENV PATH $PATH:/opt/android-sdk/tools
 ENV PATH $PATH:/opt/android-sdk/tools/bin
+ENV PATH $PATH:/opt/android-sdk/platform-tools
 ENV ANDROID_HOME /opt/android-sdk
 
 RUN mkdir /root/.android && \

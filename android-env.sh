@@ -13,11 +13,33 @@ alias android-env-run='docker run \
        -v android-env-gradle:/root/.gradle \
        -v android-env-m2:/root/.m2 \
        -v android-env-packages:/opt/android-sdk \
+       --net host \
+       android-env '
+
+alias android-env-run-it='docker run -it \
+       -v $PWD:/code \
+       -v android-env-gradle:/root/.gradle \
+       -v android-env-m2:/root/.m2 \
+       -v android-env-packages:/opt/android-sdk \
+       --net host \
+       android-env '
+
+alias android-env-gradle='docker run \
+       -v $PWD:/code \
+       -v android-env-gradle:/root/.gradle \
+       -v android-env-m2:/root/.m2 \
+       -v android-env-packages:/opt/android-sdk \
+       --net host \
        android-env ./gradlew '
 
 alias android-emulator='~/.android/sdk/tools/emulator'
 
 function android-create-emulator {
+    set -e
+    if ! [ -n "${ANDROID_SDK_ROOT+1}" ]; then
+	echo "\$ANDROID_SDK_ROOT is not defined."
+	exit 1
+    fi
     echo "Creating device with android-$1 called: $2"
     echo "Verifying required packages..."
     sdkmanager emulator
@@ -27,11 +49,11 @@ function android-create-emulator {
     export PATH=$PATH:~/.android/sdk/platform-tools
     echo "Creating avd..."
     avdmanager create avd -c 512M \
-	       -k "system-images;android-$1;google_apis;x86" \
-	       -n $2 \
-	       -b google_apis/x86 \
-	       -d "Nexus 5" \
-	       --force
+    	       -k "system-images;android-$1;google_apis;x86" \
+    	       -n $2 \
+    	       -b google_apis/x86 \
+    	       -d "Nexus 5" \
+    	       --force
     echo "Setting up device..."
     echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_ROOT/../avd/$2.avd/config.ini
     echo "skin.dynamic=no" >> $ANDROID_SDK_ROOT/../avd/$2.avd/config.ini
