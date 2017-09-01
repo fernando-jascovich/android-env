@@ -32,6 +32,14 @@ alias android-env-gradle='docker run \
        --net host \
        android-env ./gradlew '
 
+alias android-env-gradle-daemon='docker run -it -d \
+       -v $PWD:/code \
+       -v android-env-gradle:/root/.gradle \
+       -v android-env-m2:/root/.m2 \
+       -v android-env-packages:/opt/android-sdk \
+       --net host \
+       android-env bash -c "./gradlew tasks && tail -f /dev/null"'
+
 alias android-emulator='~/.android/sdk/tools/emulator'
 
 function android-create-emulator {
