@@ -6,7 +6,7 @@
 
 alias android-env-sdkmanager='docker run -it \
        -v android-env-packages:/opt/android-sdk \
-       android-env sdkmanager'
+       android-env '
 
 alias android-env-run='docker run \
        -v $PWD:/code \
@@ -67,5 +67,6 @@ function android-create-emulator {
     echo "skin.dynamic=no" >> $ANDROID_SDK_ROOT/../avd/$2.avd/config.ini
     echo "skin.name=1080x1920" >> $ANDROID_SDK_ROOT/../avd/$2.avd/config.ini
     echo "skin.path=1080x1920" >> $ANDROID_SDK_ROOT/../avd/$2.avd/config.ini
+    echo "hw.ramSize=1024" >> $ANDROID_SDK_ROOT/../avd/$2.avd/config.ini
     $ANDROID_SDK_ROOT/tools/mksdcard -l SDCARD 512M $ANDROID_SDK_ROOT/../avd/$2.avd/sdcard.img
 }
